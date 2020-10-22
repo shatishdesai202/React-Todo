@@ -1,26 +1,85 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+
+
+// Import BOOTSTRAP CSS
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+//Import External Css
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+//Importing Component
+import Header from './component/Header';
+import Form from './component/Form';
+import List from './component/List';
 
-export default App;
+export default function App() {
+
+    // State
+    const [inputText, setInputText] = useState("");
+    const [todos, setTodos] = useState([]);
+    const [status, setStatus] = useState("all");
+    const [filteredTodo, setFilteredTodo] = useState([]);
+    
+
+    useEffect( ()=>{
+        getLocalStorage();
+    },[])
+
+    // Use Effect
+    useEffect( ()=>{
+        handleStatus();
+        setLocalStorage();
+    }, [todos, status]); 
+
+    
+
+
+    // Functions 
+     
+    const handleStatus = () =>{
+
+        switch (status) {
+
+            case "complete":
+                setFilteredTodo(todos.filter( (todo) => todo.completed ));
+                break;
+            
+            case "uncomplete":
+                setFilteredTodo(todos.filter( (todo) => {
+                   return (todo.completed === false)
+                } ));
+                break;
+        
+            default:
+                setFilteredTodo(todos);
+                break;
+        }
+
+    };
+
+    // Save LocalStorage
+    const setLocalStorage =  () =>{
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }
+
+    const getLocalStorage = () =>{
+        if(localStorage.getItem("todos") == null){
+            localStorage.setItem("todos", JSON.stringify([]));
+        }else{
+          const x = JSON.parse(localStorage.getItem("todos"));
+            setTodos(x);
+        }
+    };
+
+    return (
+
+        <React.Fragment>
+
+            <Header />
+            <Form inputText={inputText} setInputText={setInputText} todos={todos} setTodos={setTodos} setStatus={setStatus} />
+            <List todos={todos} setTodos={setTodos} setFilteredTodo={filteredTodo} setInputText={setInputText} inputText={inputText} />
+
+        </React.Fragment>
+
+    )
+}
