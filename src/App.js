@@ -19,7 +19,7 @@ export default function App() {
     const [todos, setTodos] = useState([]);
     const [status, setStatus] = useState("all");
     const [filteredTodo, setFilteredTodo] = useState([]);
-    
+    const [update, setUpdate] = useState('');
 
     useEffect( ()=>{
         getLocalStorage();
@@ -76,8 +76,8 @@ export default function App() {
         <React.Fragment>
 
             <Header />
-            <Form inputText={inputText} setInputText={setInputText} todos={todos} setTodos={setTodos} setStatus={setStatus} />
-            <List todos={todos} setTodos={setTodos} setFilteredTodo={filteredTodo} setInputText={setInputText} inputText={inputText} />
+            <Form update={update} setUpdate={setUpdate} inputText={inputText} setInputText={setInputText} todos={todos} setTodos={setTodos} setStatus={setStatus} />
+            <List update={update} setUpdate={setUpdate} todos={todos} setTodos={setTodos} setFilteredTodo={filteredTodo} setInputText={setInputText} inputText={inputText} />
 
         </React.Fragment>
 
